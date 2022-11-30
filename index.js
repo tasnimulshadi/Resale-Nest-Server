@@ -36,7 +36,30 @@ const run = async () => {
             }
         })
 
+        app.get('/user', async (req, res) => {
+            const email = req.query.email;
+            const query = { email }
+            const result = await userCollection.findOne(query);
+            res.send(result ? result : { result: null });
+            // res.send(result);
+        })
 
+        app.put('/user', async (req, res) => {
+            const email = req.query.email;
+            const body = req.body;
+            // console.log(body);
+
+            const filter = { email }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    verified: body.varification
+                },
+            };
+
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        })
 
         app.get('/users', async (req, res) => {
             const role = req.query.role;
