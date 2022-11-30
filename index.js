@@ -190,7 +190,12 @@ const run = async () => {
             res.send(result);
         });
 
-
+        app.delete('/booking/:id', async (req, res) => {
+            const id = req.params.id;
+            let query = { _id: ObjectId(id) }
+            const result = await bookingCollection.deleteOne(query);
+            res.send(result);
+        });
 
         app.get('/bookings', async (req, res) => {
             const email = req.query.email;
