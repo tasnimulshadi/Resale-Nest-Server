@@ -154,7 +154,32 @@ const run = async () => {
             res.send(result);
         });
 
+        // updates product (advertise) with product id by seller
+        app.patch('/product/advertise/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const body = req.body;
+            console.log(body);
 
+            // advertise limit is 4. only update if count is less then 4
+            const countQuery = { sold: false, advertise: true };
+            const soldProductsCount = await productCollection.countDocuments(countQuery);
+            console.log(soldProductsCount);
+            if (soldProductsCount >= 4) {
+                return res.send({ acknowledged: false, adlimit: true })
+            }
+
+            let filter = { _id: ObjectId(id) }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    advertise: body.advertise
+                },
+            };
+
+            const result = await productCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        });
 
 
 
