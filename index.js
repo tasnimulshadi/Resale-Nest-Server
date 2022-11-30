@@ -92,7 +92,24 @@ const run = async () => {
 
 
 
+        // get prroducts by category id
+        app.get('/products/:id', async (req, res) => {
+            const categoryId = req.params.id;
+            const searchQuery_filter = req.query.filter;
 
+            let query = { sold: false }
+
+            if (categoryId !== 'all') {
+                query = { categoryId: categoryId, sold: false };
+            }
+            if (searchQuery_filter === 'advertise') {
+                query = { advertise: true, sold: false };
+            }
+
+            const cursor = productCollection.find(query);
+            const products = await cursor.toArray();
+            res.send(products);
+        });
 
 
 
