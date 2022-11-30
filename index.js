@@ -127,10 +127,32 @@ const run = async () => {
             res.send(products);
         });
 
+        // get prroducts by seller email
+        app.get('/productsbyseller/:email', async (req, res) => {
+            const sellerEmail = req.params.email;
+            let query = { email: sellerEmail }
+            const cursor = productCollection.find(query);
+            const products = await cursor.toArray();
+            res.send(products);
+        });
 
+        // updates product (sold) with product id by seller
+        app.patch('/product/sold/:id', async (req, res) => {
+            const id = req.params.id;
+            const body = req.body;
 
+            let filter = { _id: ObjectId(id) }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    sold: body.sold,
+                    advertise: body.advertise
+                },
+            };
 
-
+            const result = await productCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        });
 
 
 
