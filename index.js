@@ -90,7 +90,23 @@ const run = async () => {
             res.send(result);
         });
 
+        // get product by product id
+        app.get('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await productCollection.findOne(query)
+            res.send(result);
+        });
 
+        // delete prroduct by id
+        app.delete('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            // console.log(id);
+            let query = { _id: ObjectId(id) }
+            const result = await productCollection.deleteOne(query);
+            console.log(result);
+            res.send(result);
+        });
 
         // get prroducts by category id
         app.get('/products/:id', async (req, res) => {
