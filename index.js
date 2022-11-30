@@ -192,7 +192,16 @@ const run = async () => {
 
 
 
-
+        app.get('/bookings', async (req, res) => {
+            const email = req.query.email;
+            let query = {};
+            if (email) {
+                query: { buyeremail: email }
+            }
+            const cursor = bookingCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
 
 
 
