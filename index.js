@@ -182,6 +182,17 @@ const run = async () => {
         });
 
 
+        // booking
+
+        app.post('/booking', async (req, res) => {
+            const booking = req.body;
+            const result = await bookingCollection.insertOne(booking)
+            res.send(result);
+        });
+
+
+
+
 
 
 
